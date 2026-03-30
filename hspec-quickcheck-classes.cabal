@@ -14,8 +14,8 @@ build-type:     Simple
 
 description:
 
-  Integrates Hspec with quickcheck-classes, making it convenient to test that
-  typeclass instances are lawful within Hspec test suites.
+  Integrates Hspec with quickcheck-classes, making it convenient for Hspec test
+  suites to include tests for the lawfulness of type class instances.
 
 extra-doc-files:
   CHANGELOG.md
