@@ -28,6 +28,9 @@ import Data.Typeable
   ( Typeable
   , typeRep
   )
+import GHC.Stack
+  ( HasCallStack
+  )
 import Test.Hspec
   ( Spec
   , describe
@@ -50,6 +53,7 @@ import Text.Show
 testLaws
   :: forall a
    . Typeable a
+  => HasCallStack
   => (Proxy a -> Laws)
   -> Spec
 testLaws getLaws =
@@ -76,6 +80,7 @@ testLaws getLaws =
 testLawsMany
   :: forall a
    . Typeable a
+  => HasCallStack
   => [Proxy a -> Laws]
   -> Spec
 testLawsMany getLawsMany =
