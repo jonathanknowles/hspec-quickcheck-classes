@@ -9,20 +9,19 @@ module Test.Hspec.QuickCheck.Classes
   ) where
 
 import Control.Monad
-  ( forM_
-  , mapM_
+  ( mapM_
   )
 import Data.Function
   ( ($)
   )
-import Data.Monoid
-  ( Monoid (mconcat)
+import Data.List
+  ( unwords
   )
 import Data.Proxy
   ( Proxy (Proxy)
   )
-import Data.Tuple
-  ( uncurry
+import Data.String
+  ( String
   )
 import Data.Typeable
   ( Typeable
@@ -33,8 +32,9 @@ import GHC.Stack
   )
 import Test.Hspec
   ( Spec
-  , describe
-  , it
+  )
+import Test.QuickCheck
+  ( Property
   )
 import Test.QuickCheck.Classes
   ( Laws (lawsProperties, lawsTypeclass)
@@ -42,6 +42,8 @@ import Test.QuickCheck.Classes
 import Text.Show
   ( Show (show)
   )
+
+import qualified Test.Hspec as Hspec
 
 -- | Tests that the given type satisfies the laws of a single typeclass.
 --
@@ -56,18 +58,26 @@ testLaws
   => (Proxy a -> Laws)
   -> Spec
 testLaws getLaws =
-  describe description $
-    forM_ (lawsProperties laws) $
-      uncurry it
+  Hspec.describe specDescription $
+    mapM_ testNamedProperty namedProperties
   where
-    description =
-      mconcat
-        [ "Testing "
-        , lawsTypeclass laws
-        , " laws for type "
-        , show (typeRep $ Proxy @a)
-        ]
-    laws = getLaws $ Proxy @a
+    lawsToTest :: Laws
+    lawsToTest = getLaws $ Proxy @a
+
+    namedProperties :: [(String, Property)]
+    namedProperties = lawsProperties lawsToTest
+
+    specDescription :: String
+    specDescription = unwords ["Testing", typeclassName, "laws for", typeName]
+
+    testNamedProperty :: (String, Property) -> Spec
+    testNamedProperty (name, property) = Hspec.it name property
+
+    typeclassName :: String
+    typeclassName = lawsTypeclass lawsToTest
+
+    typeName :: String
+    typeName = show (typeRep $ Proxy @a)
 
 -- | Tests that the given type satisfies the laws of multiple typeclasses.
 --
