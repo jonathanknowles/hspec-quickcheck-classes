@@ -35,7 +35,6 @@ import Test.Hspec
   ( Spec
   , describe
   , it
-  , parallel
   )
 import Test.QuickCheck.Classes
   ( Laws (lawsProperties, lawsTypeclass)
@@ -57,10 +56,9 @@ testLaws
   => (Proxy a -> Laws)
   -> Spec
 testLaws getLaws =
-  parallel $
-    describe description $
-      forM_ (lawsProperties laws) $
-        uncurry it
+  describe description $
+    forM_ (lawsProperties laws) $
+      uncurry it
   where
     description =
       mconcat
