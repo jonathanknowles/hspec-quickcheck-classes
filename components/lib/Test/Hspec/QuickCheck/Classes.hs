@@ -12,6 +12,7 @@ import Control.Monad
   )
 import Data.Function
   ( ($)
+  , (.)
   )
 import Data.List
   ( unwords
@@ -56,11 +57,17 @@ testLaws
   => HasCallStack
   => [Proxy a -> Laws]
   -> Spec
-testLaws = mapM_ testLawsFor
+testLaws = Hspec.describe specDescription . mapM_ testLawsFor
   where
+    specDescription :: String
+    specDescription = unwords ["Testing laws for", typeName]
+      where
+        typeName :: String
+        typeName = show $ typeRep $ Proxy @a
+
     testLawsFor :: (Proxy a -> Laws) -> Spec
     testLawsFor toLaws =
-      Hspec.describe specDescription $
+      Hspec.describe typeclassName $
         mapM_ testNamedProperty namedProperties
       where
         laws :: Laws
@@ -69,15 +76,8 @@ testLaws = mapM_ testLawsFor
         namedProperties :: [(String, Property)]
         namedProperties = lawsProperties laws
 
-        specDescription :: String
-        specDescription =
-          unwords ["Testing", typeclassName, "laws for", typeName]
-
         testNamedProperty :: (String, Property) -> Spec
         testNamedProperty (name, property) = Hspec.it name property
 
         typeclassName :: String
         typeclassName = lawsTypeclass laws
-
-        typeName :: String
-        typeName = show $ typeRep $ Proxy @a
