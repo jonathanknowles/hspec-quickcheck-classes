@@ -4,8 +4,7 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 
 module Test.Hspec.QuickCheck.Classes
-  ( testLaws
-  , testLawsMany
+  ( testLawsMany
   ) where
 
 import Control.Monad
@@ -79,7 +78,7 @@ testLaws getLaws =
     typeName :: String
     typeName = show (typeRep $ Proxy @a)
 
--- | Tests that the given type satisfies the laws of multiple typeclasses.
+-- | Tests that the given type satisfies the laws of one or more typeclasses.
 --
 -- Example usage:
 --

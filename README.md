@@ -14,19 +14,7 @@ of type class instances.
 
 # Usage
 
-## Testing a single type class instance
-
-Use `testLaws` to test that a specified type satisfies the laws of a single
-type class:
-
-```haskell
-testLaws @Bool eqLaws
-```
-
-## Testing multiple type class instances
-
-Use `testLawsMany` to test that a specified type satisfies the laws of multiple
-type classes:
+To test that a type satisfies the laws of one or more type classes:
 
 ```haskell
 testLawsMany @Bool
@@ -39,10 +27,10 @@ testLawsMany @Bool
 
 ## Kind polymorphism
 
-Both `testLaws` and `testLawsMany` are **kind-polymorphic**, supporting type
+The `testLawsMany` function is **kind-polymorphic**, supporting type
 parameters of any kind.
 
-This means they can be used to test instances of type classes whose type
+This means it can be used to test instances of type classes whose type
 parameters are not of kind `Type`.
 
 For example, with `Maybe` (which has kind `Type -> Type`):
