@@ -48,15 +48,15 @@ import qualified Test.Hspec as Hspec
 --
 -- Example usage:
 --
--- >>> testLaws @Natural ordLaws
--- >>> testLaws @(Map Int) functorLaws
-testLaws
+-- >>> testLawsFor @Natural ordLaws
+-- >>> testLawsFor @(Map Int) functorLaws
+testLawsFor
   :: forall a
    . Typeable a
   => HasCallStack
   => (Proxy a -> Laws)
   -> Spec
-testLaws getLaws =
+testLawsFor getLaws =
   Hspec.describe specDescription $
     mapM_ testNamedProperty namedProperties
   where
@@ -91,4 +91,4 @@ testLawsMany
   => [Proxy a -> Laws]
   -> Spec
 testLawsMany getLawsMany =
-  testLaws @a `mapM_` getLawsMany
+  testLawsFor @a `mapM_` getLawsMany
