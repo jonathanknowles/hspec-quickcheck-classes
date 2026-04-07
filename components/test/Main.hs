@@ -22,7 +22,7 @@ import Test.Hspec
   ( hspec
   )
 import Test.Hspec.QuickCheck.Classes
-  ( testLawsMany
+  ( testLaws
   )
 import Test.QuickCheck.Classes
   ( alternativeLaws
@@ -43,14 +43,14 @@ import Test.QuickCheck.Classes
 main :: IO ()
 main = hspec $ do
   -- Demonstrates usage with an argument of kind 'Type':
-  testLawsMany @Bool
+  testLaws @Bool
     [ eqLaws
     , ordLaws
     , showLaws
     , showReadLaws
     ]
   -- Demonstrates usage with an argument of kind 'Type -> Type':
-  testLawsMany @Maybe
+  testLaws @Maybe
     [ alternativeLaws
     , applicativeLaws
     , functorLaws
@@ -59,7 +59,7 @@ main = hspec $ do
     , traversableLaws
     ]
   -- Demonstrates usage with an argument of kind 'Type -> Type -> Type':
-  testLawsMany @Either
+  testLaws @Either
     [ bifoldableLaws
     , bifunctorLaws
     , bitraversableLaws

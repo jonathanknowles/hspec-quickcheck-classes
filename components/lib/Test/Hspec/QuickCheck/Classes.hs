@@ -4,7 +4,7 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 
 module Test.Hspec.QuickCheck.Classes
-  ( testLawsMany
+  ( testLaws
   ) where
 
 import Control.Monad
@@ -82,13 +82,13 @@ testLawsFor getLaws =
 --
 -- Example usage:
 --
--- >>> testLawsMany @Natural [eqLaws, ordLaws]
--- >>> testLawsMany @(Map Int) [foldableLaws, functorLaws]
-testLawsMany
+-- >>> testLaws @Natural [eqLaws, ordLaws]
+-- >>> testLaws @(Map Int) [foldableLaws, functorLaws]
+testLaws
   :: forall a
    . Typeable a
   => HasCallStack
   => [Proxy a -> Laws]
   -> Spec
-testLawsMany getLawsMany =
+testLaws getLawsMany =
   testLawsFor @a `mapM_` getLawsMany
