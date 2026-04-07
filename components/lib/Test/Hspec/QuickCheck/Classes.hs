@@ -5,7 +5,6 @@
 
 module Test.Hspec.QuickCheck.Classes
   ( testLaws
-  , testLawsMany
   ) where
 
 import Control.Monad
@@ -13,6 +12,7 @@ import Control.Monad
   )
 import Data.Function
   ( ($)
+  , (.)
   )
 import Data.List
   ( unwords
@@ -45,51 +45,39 @@ import Text.Show
 
 import qualified Test.Hspec as Hspec
 
--- | Tests that the given type satisfies the laws of a single typeclass.
+-- | Tests that the given type satisfies the laws of one or more typeclasses.
 --
 -- Example usage:
 --
--- >>> testLaws @Natural ordLaws
--- >>> testLaws @(Map Int) functorLaws
+-- >>> testLaws @Natural [eqLaws, ordLaws]
+-- >>> testLaws @(Map Int) [foldableLaws, functorLaws]
 testLaws
-  :: forall a
-   . Typeable a
-  => HasCallStack
-  => (Proxy a -> Laws)
-  -> Spec
-testLaws getLaws =
-  Hspec.describe specDescription $
-    mapM_ testNamedProperty namedProperties
-  where
-    lawsToTest :: Laws
-    lawsToTest = getLaws $ Proxy @a
-
-    namedProperties :: [(String, Property)]
-    namedProperties = lawsProperties lawsToTest
-
-    specDescription :: String
-    specDescription = unwords ["Testing", typeclassName, "laws for", typeName]
-
-    testNamedProperty :: (String, Property) -> Spec
-    testNamedProperty (name, property) = Hspec.it name property
-
-    typeclassName :: String
-    typeclassName = lawsTypeclass lawsToTest
-
-    typeName :: String
-    typeName = show (typeRep $ Proxy @a)
-
--- | Tests that the given type satisfies the laws of multiple typeclasses.
---
--- Example usage:
---
--- >>> testLawsMany @Natural [eqLaws, ordLaws]
--- >>> testLawsMany @(Map Int) [foldableLaws, functorLaws]
-testLawsMany
   :: forall a
    . Typeable a
   => HasCallStack
   => [Proxy a -> Laws]
   -> Spec
-testLawsMany getLawsMany =
-  testLaws @a `mapM_` getLawsMany
+testLaws = Hspec.describe specDescription . mapM_ testLawsFor
+  where
+    specDescription :: String
+    specDescription = unwords ["Testing laws for", typeName]
+      where
+        typeName :: String
+        typeName = show $ typeRep $ Proxy @a
+
+    testLawsFor :: (Proxy a -> Laws) -> Spec
+    testLawsFor toLaws =
+      Hspec.describe typeclassName $
+        mapM_ testNamedProperty namedProperties
+      where
+        laws :: Laws
+        laws = toLaws Proxy
+
+        namedProperties :: [(String, Property)]
+        namedProperties = lawsProperties laws
+
+        testNamedProperty :: (String, Property) -> Spec
+        testNamedProperty (name, property) = Hspec.it name property
+
+        typeclassName :: String
+        typeclassName = lawsTypeclass laws
