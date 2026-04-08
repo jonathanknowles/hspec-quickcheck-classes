@@ -21,7 +21,6 @@ testLaws @Bool
   [ eqLaws
   , ordLaws
   , showLaws
-  , showReadLaws
   ]
 ```
 
