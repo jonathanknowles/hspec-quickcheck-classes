@@ -1,13 +1,10 @@
 {-# LANGUAGE PolyKinds #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeApplications #-}
-{-# LANGUAGE NoImplicitPrelude #-}
 
 module Test.Hspec.QuickCheck.Classes
   ( testLaws
   ) where
-
-import Prelude
 
 import Data.Kind
   ( Type
