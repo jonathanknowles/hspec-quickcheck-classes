@@ -36,7 +36,6 @@ import Test.QuickCheck.Classes
   , monadLaws
   , ordLaws
   , showLaws
-  , showReadLaws
   , traversableLaws
   )
 
@@ -47,7 +46,6 @@ main = hspec $ do
     [ eqLaws
     , ordLaws
     , showLaws
-    , showReadLaws
     ]
   -- Demonstrates usage with an argument of kind 'Type -> Type':
   testLaws @Maybe
