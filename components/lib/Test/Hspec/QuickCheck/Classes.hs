@@ -7,21 +7,13 @@ module Test.Hspec.QuickCheck.Classes
   ( testLaws
   ) where
 
-import Control.Monad
-  ( mapM_
-  )
-import Data.Function
-  ( ($)
-  , (.)
-  )
-import Data.List
-  ( unwords
+import Prelude
+
+import Data.Kind
+  ( Type
   )
 import Data.Proxy
   ( Proxy (Proxy)
-  )
-import Data.String
-  ( String
   )
 import Data.Typeable
   ( Typeable
@@ -37,20 +29,57 @@ import Test.QuickCheck
   ( Property
   )
 import Test.QuickCheck.Classes
-  ( Laws (lawsProperties, lawsTypeclass)
-  )
-import Text.Show
-  ( Show (show)
+  ( Laws
   )
 
 import qualified Test.Hspec as Hspec
+import qualified Test.QuickCheck.Classes as Laws
 
--- | Tests that the given type satisfies the laws of one or more typeclasses.
+_importsRequiredForHaddock :: ()
+_importsRequiredForHaddock = undefined
+  where
+    _type :: Type
+    _type = undefined
+
+-- | Tests that a type satisfies the laws of one or more typeclasses.
 --
--- Example usage:
+-- For example, to test that 'Bool' satisfies the laws of 'Eq', 'Ord', and
+-- 'Show':
 --
--- >>> testLaws @Natural [eqLaws, ordLaws]
--- >>> testLaws @(Map Int) [foldableLaws, functorLaws]
+-- @
+-- 'testLaws' \@'Bool'
+--   [ 'Laws.eqLaws'
+--   , 'Laws.ordLaws'
+--   , 'Laws.showLaws'
+--   ]
+-- @
+--
+-- === Kind polymorphism
+--
+-- The 'testLaws' function can also test instances of type classes whose type
+-- parameters are not of kind 'Type'.
+--
+-- For example, with 'Maybe', which has kind @'Type' -> 'Type'@:
+--
+-- @
+-- 'testLaws' \@'Maybe'
+--   [ 'Laws.applicativeLaws'
+--   , 'Laws.functorLaws'
+--   , 'Laws.monadLaws'
+--   , 'Laws.foldableLaws'
+--   , 'Laws.traversableLaws'
+--   ]
+-- @
+--
+-- And with 'Either', which has kind @'Type' -> 'Type' -> 'Type'@:
+--
+-- @
+-- 'testLaws' \@'Either'
+--   [ 'Laws.bifoldableLaws'
+--   , 'Laws.bifunctorLaws'
+--   , 'Laws.bitraversableLaws'
+--   ]
+-- @
 testLaws
   :: forall a
    . Typeable a
@@ -74,10 +103,10 @@ testLaws = Hspec.describe specDescription . mapM_ testLawsFor
         laws = toLaws Proxy
 
         namedProperties :: [(String, Property)]
-        namedProperties = lawsProperties laws
+        namedProperties = Laws.lawsProperties laws
 
         testNamedProperty :: (String, Property) -> Spec
         testNamedProperty (name, property) = Hspec.it name property
 
         typeclassName :: String
-        typeclassName = lawsTypeclass laws
+        typeclassName = Laws.lawsTypeclass laws
