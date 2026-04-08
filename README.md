@@ -36,8 +36,7 @@ For example, with `Maybe` (which has kind `Type -> Type`):
 
 ```haskell
 testLaws @Maybe
-  [ alternativeLaws
-  , applicativeLaws
+  [ applicativeLaws
   , functorLaws
   , monadLaws
   , foldableLaws

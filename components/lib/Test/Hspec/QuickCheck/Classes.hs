@@ -29,11 +29,10 @@ import Test.QuickCheck
   ( Property
   )
 import Test.QuickCheck.Classes
-  ( Laws
+  ( Laws (lawsProperties, lawsTypeclass)
   )
 
 import qualified Test.Hspec as Hspec
-import qualified Test.QuickCheck.Classes as Laws
 
 _importsRequiredForHaddock :: ()
 _importsRequiredForHaddock = undefined
@@ -48,9 +47,9 @@ _importsRequiredForHaddock = undefined
 --
 -- @
 -- 'testLaws' \@'Bool'
---   [ 'Laws.eqLaws'
---   , 'Laws.ordLaws'
---   , 'Laws.showLaws'
+--   [ 'Test.QuickCheck.Classes.eqLaws'
+--   , 'Test.QuickCheck.Classes.ordLaws'
+--   , 'Test.QuickCheck.Classes.showLaws'
 --   ]
 -- @
 --
@@ -63,11 +62,11 @@ _importsRequiredForHaddock = undefined
 --
 -- @
 -- 'testLaws' \@'Maybe'
---   [ 'Laws.applicativeLaws'
---   , 'Laws.functorLaws'
---   , 'Laws.monadLaws'
---   , 'Laws.foldableLaws'
---   , 'Laws.traversableLaws'
+--   [ 'Test.QuickCheck.Classes.applicativeLaws'
+--   , 'Test.QuickCheck.Classes.functorLaws'
+--   , 'Test.QuickCheck.Classes.monadLaws'
+--   , 'Test.QuickCheck.Classes.foldableLaws'
+--   , 'Test.QuickCheck.Classes.traversableLaws'
 --   ]
 -- @
 --
@@ -75,9 +74,9 @@ _importsRequiredForHaddock = undefined
 --
 -- @
 -- 'testLaws' \@'Either'
---   [ 'Laws.bifoldableLaws'
---   , 'Laws.bifunctorLaws'
---   , 'Laws.bitraversableLaws'
+--   [ 'Test.QuickCheck.Classes.bifoldableLaws'
+--   , 'Test.QuickCheck.Classes.bifunctorLaws'
+--   , 'Test.QuickCheck.Classes.bitraversableLaws'
 --   ]
 -- @
 testLaws
@@ -103,10 +102,10 @@ testLaws = Hspec.describe specDescription . mapM_ testLawsFor
         laws = toLaws Proxy
 
         namedProperties :: [(String, Property)]
-        namedProperties = Laws.lawsProperties laws
+        namedProperties = lawsProperties laws
 
         testNamedProperty :: (String, Property) -> Spec
         testNamedProperty (name, property) = Hspec.it name property
 
         typeclassName :: String
-        typeclassName = Laws.lawsTypeclass laws
+        typeclassName = lawsTypeclass laws
