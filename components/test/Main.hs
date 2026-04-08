@@ -25,8 +25,7 @@ import Test.Hspec.QuickCheck.Classes
   ( testLaws
   )
 import Test.QuickCheck.Classes
-  ( alternativeLaws
-  , applicativeLaws
+  ( applicativeLaws
   , bifoldableLaws
   , bifunctorLaws
   , bitraversableLaws
@@ -49,8 +48,7 @@ main = hspec $ do
     ]
   -- Demonstrates usage with an argument of kind 'Type -> Type':
   testLaws @Maybe
-    [ alternativeLaws
-    , applicativeLaws
+    [ applicativeLaws
     , functorLaws
     , monadLaws
     , foldableLaws
