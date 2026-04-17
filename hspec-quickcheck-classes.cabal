@@ -26,7 +26,7 @@ common dependency-base
 common dependency-hspec
     build-depends:hspec                 >= 2.11.17    && < 2.12
 common dependency-QuickCheck
-    build-depends:QuickCheck            >= 2.16.0.0   && < 2.17
+    build-depends:QuickCheck            >= 2.16.0.0   && < 2.19
 common dependency-quickcheck-classes
     build-depends:quickcheck-classes    >= 0.6.5.0    && < 0.7
 
