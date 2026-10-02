@@ -1,6 +1,6 @@
 cabal-version:  3.0
 name:           hspec-quickcheck-classes
-version:        0.0.0.0
+version:        0.0.0.1
 synopsis:       Integration between Hspec and quickcheck-classes
 category:       Testing
 homepage:       https://github.com/jonathanknowles/hspec-quickcheck-classes
@@ -26,7 +26,7 @@ common dependency-base
 common dependency-hspec
     build-depends:hspec                 >= 2.11.17    && < 2.12
 common dependency-QuickCheck
-    build-depends:QuickCheck            >= 2.16.0.0   && < 2.19
+    build-depends:QuickCheck            >= 2.16.0.0   && < 2.20
 common dependency-quickcheck-classes
     build-depends:quickcheck-classes    >= 0.6.5.0    && < 0.7
 
